@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { usePlaidLink } from "react-plaid-link";
+<button disabled className="opacity-50 cursor-not-allowed">
+  Connect Account (Plaid setup pending)
+</button>
 import { useQuery } from "@tanstack/react-query";
 import { FinancialGroupChart } from "@/components/FinancialGroupChart";
 import { DashboardSummary } from "@/components/DashboardSummary";
