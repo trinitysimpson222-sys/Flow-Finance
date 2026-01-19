@@ -1,9 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-<button disabled className="opacity-50 cursor-not-allowed">
-  Connect Account (Plaid setup pending)
-</button>
 import { useQuery } from "@tanstack/react-query";
 import { FinancialGroupChart } from "@/components/FinancialGroupChart";
 import { DashboardSummary } from "@/components/DashboardSummary";
@@ -20,6 +17,9 @@ import {
 } from "@heroicons/react/24/solid";
 import { NetWorthChart } from "@/components/NetWorthChart";
 import { Account } from "@/types/account";
+
+// Feature flag: Set to true once PLAID_CLIENT_ID, PLAID_SECRET, PLAID_ENV are configured on Vercel
+const PLAID_ENABLED = false;
 
 export default function Home() {
   const [linkToken, setLinkToken] = useState<string | null>(null);
@@ -239,6 +239,8 @@ export default function Home() {
   };
 
   useEffect(() => {
+    if (!PLAID_ENABLED) return;
+    
     const getToken = async () => {
       try {
         const response = await fetch("/api/plaid/create-link-token", {

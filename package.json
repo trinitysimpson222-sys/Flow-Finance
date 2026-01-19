@@ -10,7 +10,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test-email": "tsx scripts/send-test-email.ts"
+    "test-email": "tsx scripts/send-test-email.ts",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
