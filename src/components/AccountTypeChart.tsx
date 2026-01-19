@@ -88,15 +88,15 @@ export function AccountTypeChart({
         stacked: false,
         beginAtZero: true,
         ticks: {
-          callback: (value: number) => formatBalance(value),
+          callback: (value: any) => formatBalance(value as number),
         },
       },
     },
     plugins: {
       tooltip: {
         callbacks: {
-          label: (context: { raw: number; dataset: { label: string } }) => {
-            const value = context.raw;
+          label: (context: any) => {
+            const value = context.raw as number;
             const percentage = ((value / totalBalance) * 100).toFixed(1);
             return `${context.dataset.label}: ${formatBalance(
               Math.abs(value)

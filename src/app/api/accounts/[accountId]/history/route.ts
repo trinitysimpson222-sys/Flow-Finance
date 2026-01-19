@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
+type Params = { accountId: string };
+
 export async function GET(
   request: Request,
-  context: { params: { accountId: string } }
+  { params }: { params: Promise<Params> }
 ) {
   try {
-    // Ensure params are properly awaited
-    const { accountId } = await Promise.resolve(context.params);
+    const { accountId } = await params;
 
     const balances = await prisma.accountBalance.findMany({
       where: {

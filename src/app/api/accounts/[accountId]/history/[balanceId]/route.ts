@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
+type Params = { accountId: string; balanceId: string };
+
 export async function DELETE(
   request: Request,
-  context: { params: { accountId: string; balanceId: string } }
+  { params }: { params: Promise<Params> }
 ) {
   try {
-    const { accountId, balanceId } = await Promise.resolve(context.params);
+    const { accountId, balanceId } = await params;
 
     // Verify the balance record belongs to the specified account
     const balance = await prisma.accountBalance.findFirst({

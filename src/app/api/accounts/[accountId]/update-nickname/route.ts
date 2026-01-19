@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
+type Params = { accountId: string };
+
 export async function POST(
   request: Request,
-  context: { params: { accountId: string } }
+  { params }: { params: Promise<Params> }
 ) {
   try {
-    const { accountId } = await Promise.resolve(context.params);
+    const { accountId } = await params;
     const { nickname } = await request.json();
 
     const account = await prisma.account.update({

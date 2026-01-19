@@ -2,14 +2,18 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { format } from "date-fns";
 
+type Params = { accountId: string };
+
 export async function POST(
   request: Request,
-  { params }: { params: { accountId: string } }
+  { params }: { params: Promise<Params> }
 ) {
   try {
+    const { accountId } = await params;
+    
     // Get all balance records for the account
     const records = await prisma.accountBalance.findMany({
-      where: { accountId: params.accountId },
+      where: { accountId },
       orderBy: { date: "desc" },
     });
 

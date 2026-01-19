@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { startOfMonth, eachMonthOfInterval, isSameMonth } from "date-fns";
+import { startOfMonth, eachMonthOfInterval } from "date-fns";
+
+type Params = { accountId: string };
 
 export async function POST(
   request: Request,
-  context: { params: { accountId: string } }
+  { params }: { params: Promise<Params> }
 ) {
   try {
-    const { accountId } = await Promise.resolve(context.params);
+    const { accountId } = await params;
+
 
     // Get the account's existing balances
     const account = await prisma.account.findUnique({

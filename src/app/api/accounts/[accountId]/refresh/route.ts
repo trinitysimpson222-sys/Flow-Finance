@@ -86,12 +86,14 @@ async function refreshCoinbaseAccount(accessToken: string, accountId: string) {
   };
 }
 
+type Params = { accountId: string };
+
 export async function POST(
   request: Request,
-  { params }: { params: { accountId: string } }
+  { params }: { params: Promise<Params> }
 ) {
   try {
-    const { accountId } = await Promise.resolve(params);
+    const { accountId } = await params;
 
     const account = await prisma.account.findUnique({
       where: { id: accountId },
