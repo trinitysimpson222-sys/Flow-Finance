@@ -127,10 +127,6 @@ export default function Home() {
     [refetch]
   );
 
-  const { open, ready } = usePlaidLink({
-    token: linkToken,
-    onSuccess,
-  });
 
   const connectCoinbase = async () => {
     try {
@@ -378,13 +374,10 @@ export default function Home() {
                   "Connect Coinbase"
                 )}
               </button>
-              <button
-                onClick={() => open()}
-                disabled={!ready}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-              >
-                Connect Bank
-              </button>
+              {/* PLAID INTEGRATION — TEMPORARILY DISABLED */}
+<div className="rounded-lg border border-dashed p-6 text-center text-muted-foreground">
+  Plaid connection will be enabled after initial deployment.
+</div>
             </div>
           </div>
         </div>
