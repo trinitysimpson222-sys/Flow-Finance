@@ -6,6 +6,7 @@ import { FinancialGroupChart } from "@/components/FinancialGroupChart";
 import { DashboardSummary } from "@/components/DashboardSummary";
 import { AccountCard } from "@/components/AccountCard";
 import { ManualAccountForm } from "@/components/ManualAccountForm";
+import { SimpleFINConnect } from "@/components/SimpleFINConnect";
 import {
   EyeIcon,
   EyeSlashIcon,
@@ -14,6 +15,7 @@ import {
   PlusIcon,
   ArrowPathIcon,
   XCircleIcon,
+  LinkIcon,
 } from "@heroicons/react/24/solid";
 import { NetWorthChart } from "@/components/NetWorthChart";
 import { Account } from "@/types/account";
@@ -22,6 +24,7 @@ import { Account } from "@/types/account";
 const PLAID_ENABLED = false;
 
 export default function Home() {
+  const [mounted, setMounted] = useState(false);
   const [linkToken, setLinkToken] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isRefreshingInstitutions, setIsRefreshingInstitutions] =
@@ -29,6 +32,7 @@ export default function Home() {
   const [showHidden, setShowHidden] = useState(false);
   const [isMasked, setIsMasked] = useState(false);
   const [showManualForm, setShowManualForm] = useState(false);
+  const [showSimpleFINForm, setShowSimpleFINForm] = useState(false);
   const [isConnectingCoinbase, setIsConnectingCoinbase] = useState(false);
   const [refreshingInstitutions, setRefreshingInstitutions] = useState<
     Record<string, boolean>
@@ -262,7 +266,11 @@ export default function Home() {
     fetchAccountsWithHistory();
   }, []);
 
-  if (isLoadingAccounts || isLoadingHistory) {
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted || isLoadingAccounts || isLoadingHistory) {
     return (
       <div className="min-h-screen p-8">
         <div className="max-w-7xl mx-auto">
@@ -363,6 +371,13 @@ export default function Home() {
                 Add Manual Account
               </button>
               <button
+                onClick={() => setShowSimpleFINForm(true)}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"
+              >
+                <LinkIcon className="w-5 h-5" />
+                Connect Bank (SimpleFIN)
+              </button>
+              <button
                 onClick={connectCoinbase}
                 disabled={isConnectingCoinbase}
                 className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
@@ -376,10 +391,6 @@ export default function Home() {
                   "Connect Coinbase"
                 )}
               </button>
-              {/* PLAID INTEGRATION — TEMPORARILY DISABLED */}
-<div className="rounded-lg border border-dashed p-6 text-center text-muted-foreground">
-  Plaid connection will be enabled after initial deployment.
-</div>
             </div>
           </div>
         </div>
@@ -395,6 +406,21 @@ export default function Home() {
                   refetch();
                 }}
                 onCancel={() => setShowManualForm(false)}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* SimpleFIN Connect Dialog */}
+        {showSimpleFINForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg p-6 max-w-lg w-full">
+              <SimpleFINConnect
+                onSuccess={() => {
+                  setShowSimpleFINForm(false);
+                  refetch();
+                }}
+                onCancel={() => setShowSimpleFINForm(false)}
               />
             </div>
           </div>
